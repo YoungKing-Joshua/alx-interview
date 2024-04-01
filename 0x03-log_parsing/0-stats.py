@@ -40,7 +40,7 @@ try:
             counter += 1
 
             if counter <= 10:
-                total_file_size += int(parsed_line[0]) # size enigma
+                total_file_size += int(parsed_line[0])  # size enigma
                 code = parsed_line[1]  # classified code
 
                 if (code in dict_sc.keys()):
