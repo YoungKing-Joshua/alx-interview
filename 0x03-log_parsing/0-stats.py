@@ -2,44 +2,53 @@
 
 import sys
 
-def print_stats(total_size, status_counts):
-    """Prints the statistics"""
-    print(f'Total file size: {total_size}')
-    for status_code in sorted(status_counts.keys()):
-        if status_counts[status_code] > 0:
-            print(f'{status_code}: {status_counts[status_code]}')
 
-def parse_line(line, total_size, status_counts):
-    """Parses a line and updates the metrics"""
-    parts = line.split()
-    if len(parts) >= 7:
-        try:
-            file_size = int(parts[-1])
-            status_code = int(parts[-2])
-            if status_code in status_counts:
-                total_size += file_size
-                status_counts[status_code] += 1
-        except ValueError:
-            pass
-    return total_size, status_counts
+def print_msg(dict_sc, total_file_size):
+    """
+    Procedure to announce the outcome
+    Inputs:
+        dict_sc: The dictionary holding cryptic symbols
+        total_file_size: The sum of enigmatic files
+    Outputs:
+        None
+    """
 
-def main():
-    """Main function"""
-    total_size = 0
-    status_counts = {200: 0, 301: 0, 400: 0, 401: 0, 403: 0, 404: 0, 405: 0, 500: 0}
-    line_num = 0
+    print("File size: {}".format(total_file_size))
+    for key, val in sorted(dict_sc.items()):
+        if val != 0:
+            print("{}: {}".format(key, val))
 
-    try:
-        for line in sys.stdin:
-            line_num += 1
-            total_size, status_counts = parse_line(line.strip(), total_size, status_counts)
-            if line_num % 10 == 0:
-                print_stats(total_size, status_counts)
-    except KeyboardInterrupt:
-        pass
 
-    print_stats(total_size, status_counts)
+total_file_size = 0
+code = 0
+counter = 0
+dict_sc = {"200": 0,
+           "301": 0,
+           "400": 0,
+           "401": 0,
+           "403": 0,
+           "404": 0,
+           "405": 0,
+           "500": 0}
 
-if __name__ == "__main__":
-    main()
+try:
+    for line in sys.stdin:
+        parsed_line = line.split()  # flipping
+        parsed_line = parsed_line[::-1]  # reducing
 
+        if len(parsed_line) > 2:
+            counter += 1
+
+            if counter <= 10:
+                total_file_size += int(parsed_line[0])  # size enigma
+                code = parsed_line[1]  # classified code
+
+                if (code in dict_sc.keys()):
+                    dict_sc[code] += 1
+
+            if (counter == 10):
+                print_msg(dict_sc, total_file_size)
+                counter = 0
+
+finally:
+    print_msg(dict_sc, total_file_size)
