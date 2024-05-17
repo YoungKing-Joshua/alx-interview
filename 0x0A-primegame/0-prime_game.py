@@ -1,10 +1,10 @@
 #!/usr/bin/python3
-""" Prime game """
+""" &Prime Number Game """
 
 
 def isWinner(x, nums):
     """
-        Defines the function isWinner which determines the winner of a
+        Dunction isWinner determines the winner of the
         prime game session with `x` rounds.
     """
     if x < 1 or not nums:
